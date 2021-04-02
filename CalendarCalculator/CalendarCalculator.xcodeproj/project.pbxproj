@@ -22,6 +22,7 @@
 		FCCCF4892616C43E00FD1265 /* MSSCalendarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCCF47C2616C43E00FD1265 /* MSSCalendarManager.m */; };
 		FCCCF48A2616C43E00FD1265 /* MSSCircleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCCF47F2616C43E00FD1265 /* MSSCircleLabel.m */; };
 		FCCCF48B2616C43E00FD1265 /* MSSCalendarHeaderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCCF4812616C43E00FD1265 /* MSSCalendarHeaderModel.m */; };
+		FCCCF48E2616F34000FD1265 /* datesJson in Resources */ = {isa = PBXBuildFile; fileRef = FCCCF48D2616F34000FD1265 /* datesJson */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		FCCCF4812616C43E00FD1265 /* MSSCalendarHeaderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSCalendarHeaderModel.m; sourceTree = "<group>"; };
 		FCCCF4822616C43E00FD1265 /* MSSChineseCalendarManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSChineseCalendarManager.h; sourceTree = "<group>"; };
 		FCCCF4832616C43E00FD1265 /* MSSCalendarCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSCalendarCollectionReusableView.h; sourceTree = "<group>"; };
+		FCCCF48D2616F34000FD1265 /* datesJson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = datesJson; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 		FC864A3F2614718F002D5579 /* CalendarCalculator */ = {
 			isa = PBXGroup;
 			children = (
+				FCCCF48D2616F34000FD1265 /* datesJson */,
 				FCCCF4722616C43E00FD1265 /* MSSCalendar */,
 				FC864A402614718F002D5579 /* AppDelegate.h */,
 				FC864A412614718F002D5579 /* AppDelegate.m */,
@@ -182,6 +185,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCCCF48E2616F34000FD1265 /* datesJson in Resources */,
 				FC864A5026147190002D5579 /* LaunchScreen.storyboard in Resources */,
 				FC864A4D26147190002D5579 /* Assets.xcassets in Resources */,
 				FC864A4B2614718F002D5579 /* Main.storyboard in Resources */,
