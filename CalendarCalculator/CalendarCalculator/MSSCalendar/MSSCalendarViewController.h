@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol MSSCalendarViewControllerDelegate <NSObject>
-- (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate datesDescription:(NSDictionary *)datesDescription;
+- (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate dates:(NSMutableArray<NSMutableDictionary<NSString *, NSString *> *> *)dates;
 @end
 
 typedef NS_ENUM(NSInteger, MSSCalendarViewControllerType)

@@ -19,7 +19,8 @@
 @property (nonatomic,strong)NSMutableArray *dataArray;
 @property (nonatomic,strong)MSSCalendarPopView *popView;
 @property (nonatomic,strong)NSMutableDictionary *datesDescription;
-@property (nonatomic,strong)NSMutableArray<MSSCalendarModel *> *dates;
+// {"year": "2021",  "month": "2",  "day": "7",  "week": "7"}
+@property (nonatomic,strong)NSMutableArray<NSMutableDictionary<NSString *, NSString *> *>  *dates;
 @end
 
 @implementation MSSCalendarViewController
@@ -191,7 +192,12 @@
             cell.isSelected = YES;
             cell.dateLabel.textColor = MSS_SelectTextColor;
             cell.subLabel.text = MSS_SelectBeginText;
-            [_dates addObject:calendarItem];
+            NSMutableDictionary *infoItem = [[NSMutableDictionary alloc] init];
+            infoItem[@"year"] = [NSString stringWithFormat:@"%ld", calendarItem.year];
+            infoItem[@"month"] = [NSString stringWithFormat:@"%ld", calendarItem.month];
+            infoItem[@"day"] = [NSString stringWithFormat:@"%ld", calendarItem.day];
+            infoItem[@"week"] = [NSString stringWithFormat:@"%ld", calendarItem.week];
+            [_dates addObject:infoItem];
             
         }
         // 结束日期
@@ -200,14 +206,24 @@
             cell.isSelected = YES;
             cell.dateLabel.textColor = MSS_SelectTextColor;
             cell.subLabel.text = MSS_SelectEndText;
-            [_dates addObject:calendarItem];
+            NSMutableDictionary *infoItem = [[NSMutableDictionary alloc] init];
+            infoItem[@"year"] = [NSString stringWithFormat:@"%ld", calendarItem.year];
+            infoItem[@"month"] = [NSString stringWithFormat:@"%ld", calendarItem.month];
+            infoItem[@"day"] = [NSString stringWithFormat:@"%ld", calendarItem.day];
+            infoItem[@"week"] = [NSString stringWithFormat:@"%ld", calendarItem.week];
+            [_dates addObject:infoItem];
         }
         // 开始和结束之间的日期
         else if(calendarItem.dateInterval > _startDate && calendarItem.dateInterval < _endDate)
         {
             cell.isSelected = YES;
             cell.dateLabel.textColor = MSS_SelectTextColor;
-            [_dates addObject:calendarItem];
+            NSMutableDictionary *infoItem = [[NSMutableDictionary alloc] init];
+            infoItem[@"year"] = [NSString stringWithFormat:@"%ld", calendarItem.year];
+            infoItem[@"month"] = [NSString stringWithFormat:@"%ld", calendarItem.month];
+            infoItem[@"day"] = [NSString stringWithFormat:@"%ld", calendarItem.day];
+            infoItem[@"week"] = [NSString stringWithFormat:@"%ld", calendarItem.week];
+            [_dates addObject:infoItem];
         }
         else
         {
@@ -289,9 +305,9 @@
             [_collectionView reloadData];
             [_collectionView layoutIfNeeded];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if([_delegate respondsToSelector:@selector(calendarViewConfirmClickWithStartDate:endDate:datesDescription:)])
+                if([_delegate respondsToSelector:@selector(calendarViewConfirmClickWithStartDate:endDate:dates:)])
                 {
-                    [_delegate calendarViewConfirmClickWithStartDate:_startDate endDate:_endDate datesDescription:_datesDescription];
+                    [_delegate calendarViewConfirmClickWithStartDate:_startDate endDate:_endDate dates:_dates];
                 }
             });
             [self dismissViewControllerAnimated:YES completion:nil];

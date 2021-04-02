@@ -83,7 +83,7 @@
     [self presentViewController:cvc animated:YES completion:nil];
 }
 
-- (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate datesDescription:(NSDictionary *)datesDescription
+- (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate dates:(NSDictionary *)dates
 {
     _startDate = startDate;
     _endDate = endDate;
