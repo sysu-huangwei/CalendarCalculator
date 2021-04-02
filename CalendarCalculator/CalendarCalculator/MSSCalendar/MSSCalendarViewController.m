@@ -279,6 +279,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    BOOL needReload = YES;
     MSSCalendarHeaderModel *headerItem = _dataArray[indexPath.section];
     MSSCalendarModel *calendaItem = headerItem.calendarItemArray[indexPath.row];
     // 当开始日期为空时
@@ -299,14 +300,14 @@
         // 判断第二个选择日期是否比现在开始日期大
         if(_startDate < calendaItem.dateInterval)
         {
+            needReload = NO;
             _endDate = calendaItem.dateInterval;
             [_datesDescription removeAllObjects];
             [_dates removeAllObjects];
             [_collectionView reloadData];
             [_collectionView layoutIfNeeded];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if([_delegate respondsToSelector:@selector(calendarViewConfirmClickWithStartDate:endDate:dates:)])
-                {
+                if([_delegate respondsToSelector:@selector(calendarViewConfirmClickWithStartDate:endDate:dates:)]) {
                     [_delegate calendarViewConfirmClickWithStartDate:_startDate endDate:_endDate dates:_dates];
                 }
             });
@@ -318,7 +319,9 @@
             [self showPopViewWithIndexPath:indexPath];
         }
     }
-    [_collectionView reloadData];
+    if (needReload) {
+        [_collectionView reloadData];
+    }
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
