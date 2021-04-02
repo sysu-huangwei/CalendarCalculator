@@ -172,9 +172,9 @@
 }
 
 - (BOOL)isSameDate:(NSDictionary<NSString *, NSString *> *)date1 otherDate:(NSDictionary<NSString *, NSString *> *)date2 {
-    return [date1[@"year"] isEqualToString:date2[@"year"]] &&
-           [date1[@"month"] isEqualToString:date2[@"month"]] &&
-           [date1[@"day"] isEqualToString:date2[@"day"]];
+    return [date1[@"year"] integerValue] == [date2[@"year"] integerValue] &&
+           [date1[@"month"] integerValue] == [date2[@"month"] integerValue] &&
+           [date1[@"day"] integerValue] == [date2[@"day"] integerValue];
 }
 
 @end
