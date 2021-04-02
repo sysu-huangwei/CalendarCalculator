@@ -14,12 +14,16 @@
 @property (nonatomic,strong)UILabel *endLabel;
 @property (nonatomic,assign)NSInteger startDate;
 @property (nonatomic,assign)NSInteger endDate;
+// {"year": "2021",  "month": "2",  "day": "7",  "name": "春节"}
+@property (nonatomic,strong)NSMutableArray<NSMutableDictionary<NSString *, NSString *> *> *chineseHolidayNeedWork;
+@property (nonatomic,strong)NSMutableArray<NSMutableDictionary<NSString *, NSString *> *> *chineseHolidayNotNeedWork;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self parseChineseHoliday];
     [self createUI];
 }
 
@@ -94,6 +98,41 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)parseChineseHoliday {
+    if (!_chineseHolidayNeedWork) {
+        _chineseHolidayNeedWork = [[NSMutableArray alloc] init];
+    }
+    if (!_chineseHolidayNotNeedWork) {
+        _chineseHolidayNotNeedWork = [[NSMutableArray alloc] init];
+    }
+    
+    NSString *jsonFolderPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"datesJson"];
+    for (int i = 2007; i <= 2021; i++) {
+        NSString *jsonPath = [jsonFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.json", i]];
+        NSData *jsonData = [NSData dataWithContentsOfFile:jsonPath];
+        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:nil];
+        NSArray *days = jsonDict[@"days"];
+        for (NSDictionary *dayDict in days) {
+            NSMutableDictionary *infoItem = [[NSMutableDictionary alloc] init];
+            infoItem[@"name"] = dayDict[@"name"];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSDate *date = [dateFormatter dateFromString:dayDict[@"date"]];
+            [dateFormatter setDateFormat:@"yyyy"];
+            infoItem[@"year"] = [dateFormatter stringFromDate:date];
+            [dateFormatter setDateFormat:@"MM"];
+            infoItem[@"month"] = [dateFormatter stringFromDate:date];
+            [dateFormatter setDateFormat:@"dd"];
+            infoItem[@"day"] = [dateFormatter stringFromDate:date];
+            if ([dayDict[@"isOffDay"] boolValue]) {
+                [_chineseHolidayNotNeedWork addObject:infoItem];
+            } else {
+                [_chineseHolidayNeedWork addObject:infoItem];
+            }
+        }
+    }
 }
 
 @end
