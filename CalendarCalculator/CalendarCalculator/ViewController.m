@@ -17,6 +17,10 @@
 // {"year": "2021",  "month": "2",  "day": "7",  "name": "春节"}
 @property (nonatomic,strong)NSMutableArray<NSMutableDictionary<NSString *, NSString *> *> *chineseHolidayNeedWork;
 @property (nonatomic,strong)NSMutableArray<NSMutableDictionary<NSString *, NSString *> *> *chineseHolidayNotNeedWork;
+
+// {"year": "2021",  "month": "2",  "day": "7",  "week": "7"}
+@property (nonatomic,strong)NSMutableArray<NSDictionary<NSString *, NSString *> *> *selectedNeedWork;
+@property (nonatomic,strong)NSMutableArray<NSDictionary<NSString *, NSString *> *> *selectedNotNeedWork;
 @end
 
 @implementation ViewController
@@ -83,16 +87,17 @@
     [self presentViewController:cvc animated:YES completion:nil];
 }
 
-- (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate dates:(NSDictionary *)dates
+- (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate dates:(NSMutableArray<NSMutableDictionary<NSString *, NSString *> *> *)dates
 {
+    [self getSelectedDates:dates];
     _startDate = startDate;
     _endDate = endDate;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     [dateFormatter setDateFormat: @"yyyy-MM-dd"];
     NSString *startDateString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_startDate]];
     NSString *endDateString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_endDate]];
-    _startLabel.text = [NSString stringWithFormat:@"开始日期:%@",startDateString];
-    _endLabel.text = [NSString stringWithFormat:@"结束日期:%@",endDateString];
+    _startLabel.text = [NSString stringWithFormat:@"开始日期 工作日:%ld",_selectedNeedWork.count];
+    _endLabel.text = [NSString stringWithFormat:@"结束日期 假期:%ld",_selectedNotNeedWork.count];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -133,6 +138,43 @@
             }
         }
     }
+}
+
+- (void)getSelectedDates:(NSArray<NSDictionary<NSString *, NSString *> *> *)dates {
+    if (!_selectedNotNeedWork) {
+        _selectedNotNeedWork = [[NSMutableArray alloc] init];
+    }
+    if (!_selectedNeedWork) {
+        _selectedNeedWork = [[NSMutableArray alloc] init];
+    }
+    [_selectedNotNeedWork removeAllObjects];
+    [_selectedNeedWork removeAllObjects];
+    for (NSDictionary<NSString *, NSString *> *date in dates) {
+        if ([self isDate:date InList:_chineseHolidayNotNeedWork]) {
+            [_selectedNotNeedWork addObject:date];
+        } else if ([self isDate:date InList:_chineseHolidayNeedWork]) {
+            [_selectedNeedWork addObject:date];
+        } else if ([date[@"week"] integerValue] == 6 || [date[@"week"] integerValue] == 0) {
+            [_selectedNotNeedWork addObject:date];
+        } else {
+            [_selectedNeedWork addObject:date];
+        }
+    }
+}
+
+- (BOOL)isDate:(NSDictionary<NSString *, NSString *> *)date InList:(NSArray<NSDictionary<NSString *, NSString *> *> *)list {
+    for (NSDictionary<NSString *, NSString *> *dateItem in list) {
+        if ([self isSameDate:date otherDate:dateItem]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isSameDate:(NSDictionary<NSString *, NSString *> *)date1 otherDate:(NSDictionary<NSString *, NSString *> *)date2 {
+    return [date1[@"year"] isEqualToString:date2[@"year"]] &&
+           [date1[@"month"] isEqualToString:date2[@"month"]] &&
+           [date1[@"day"] isEqualToString:date2[@"day"]];
 }
 
 @end
