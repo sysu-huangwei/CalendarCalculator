@@ -12,6 +12,8 @@
 @interface ViewController ()<MSSCalendarViewControllerDelegate>
 @property (nonatomic,strong)UILabel *startLabel;
 @property (nonatomic,strong)UILabel *endLabel;
+@property (nonatomic,strong)UILabel *workdayCountLabel;
+@property (nonatomic,strong)UILabel *holidayCountLabel;
 @property (nonatomic,assign)NSInteger startDate;
 @property (nonatomic,assign)NSInteger endDate;
 // {"year": "2021",  "month": "2",  "day": "7",  "name": "春节"}
@@ -62,6 +64,24 @@
     _endLabel.text = @"开始日期";
     _endLabel.text = @"结束日期";
     [self.view addSubview:_endLabel];
+    
+    _workdayCountLabel = [[UILabel alloc]init];
+    _workdayCountLabel.backgroundColor = MSS_SelectBackgroundColor;
+    _workdayCountLabel.textColor = MSS_SelectTextColor;
+    _workdayCountLabel.textAlignment = NSTextAlignmentCenter;
+    _workdayCountLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    _workdayCountLabel.frame = CGRectMake(20, CGRectGetMaxY(_endLabel.frame) + 20, MSS_SCREEN_WIDTH - 20 * 2, 50);
+    _workdayCountLabel.text = @"工作日";
+    [self.view addSubview:_workdayCountLabel];
+    
+    _holidayCountLabel = [[UILabel alloc]init];
+    _holidayCountLabel.backgroundColor = MSS_SelectBackgroundColor;
+    _holidayCountLabel.textColor = MSS_SelectTextColor;
+    _holidayCountLabel.textAlignment = NSTextAlignmentCenter;
+    _holidayCountLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    _holidayCountLabel.frame = CGRectMake(20, CGRectGetMaxY(_workdayCountLabel.frame) + 20, MSS_SCREEN_WIDTH - 20 * 2, 50);
+    _holidayCountLabel.text = @"休息日";
+    [self.view addSubview:_holidayCountLabel];
 }
 
 - (void)calendarClick:(UIButton *)btn
@@ -96,8 +116,10 @@
     [dateFormatter setDateFormat: @"yyyy-MM-dd"];
     NSString *startDateString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_startDate]];
     NSString *endDateString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_endDate]];
-    _startLabel.text = [NSString stringWithFormat:@"开始日期 工作日:%ld",_selectedNeedWork.count];
-    _endLabel.text = [NSString stringWithFormat:@"结束日期 假期:%ld",_selectedNotNeedWork.count];
+    _startLabel.text = [NSString stringWithFormat:@"开始日期: %@",startDateString];
+    _endLabel.text = [NSString stringWithFormat:@"结束日期: %@",endDateString];
+    _workdayCountLabel.text = [NSString stringWithFormat:@"工作日: %ld", _selectedNeedWork.count];
+    _holidayCountLabel.text = [NSString stringWithFormat:@"休息日: %ld", _selectedNotNeedWork.count];
 }
 
 - (void)didReceiveMemoryWarning {
