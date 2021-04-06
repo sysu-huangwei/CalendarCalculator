@@ -192,12 +192,6 @@
             cell.isSelected = YES;
             cell.dateLabel.textColor = MSS_SelectTextColor;
             cell.subLabel.text = MSS_SelectBeginText;
-            NSMutableDictionary *infoItem = [[NSMutableDictionary alloc] init];
-            infoItem[@"year"] = [NSString stringWithFormat:@"%ld", calendarItem.year];
-            infoItem[@"month"] = [NSString stringWithFormat:@"%ld", calendarItem.month];
-            infoItem[@"day"] = [NSString stringWithFormat:@"%ld", calendarItem.day];
-            infoItem[@"week"] = [NSString stringWithFormat:@"%ld", calendarItem.week];
-            [_dates addObject:infoItem];
             
         }
         // 结束日期
@@ -206,24 +200,12 @@
             cell.isSelected = YES;
             cell.dateLabel.textColor = MSS_SelectTextColor;
             cell.subLabel.text = MSS_SelectEndText;
-            NSMutableDictionary *infoItem = [[NSMutableDictionary alloc] init];
-            infoItem[@"year"] = [NSString stringWithFormat:@"%ld", calendarItem.year];
-            infoItem[@"month"] = [NSString stringWithFormat:@"%ld", calendarItem.month];
-            infoItem[@"day"] = [NSString stringWithFormat:@"%ld", calendarItem.day];
-            infoItem[@"week"] = [NSString stringWithFormat:@"%ld", calendarItem.week];
-            [_dates addObject:infoItem];
         }
         // 开始和结束之间的日期
         else if(calendarItem.dateInterval > _startDate && calendarItem.dateInterval < _endDate)
         {
             cell.isSelected = YES;
             cell.dateLabel.textColor = MSS_SelectTextColor;
-            NSMutableDictionary *infoItem = [[NSMutableDictionary alloc] init];
-            infoItem[@"year"] = [NSString stringWithFormat:@"%ld", calendarItem.year];
-            infoItem[@"month"] = [NSString stringWithFormat:@"%ld", calendarItem.month];
-            infoItem[@"day"] = [NSString stringWithFormat:@"%ld", calendarItem.day];
-            infoItem[@"week"] = [NSString stringWithFormat:@"%ld", calendarItem.week];
-            [_dates addObject:infoItem];
         }
         else
         {
@@ -286,13 +268,16 @@
     if(_startDate == 0)
     {
         _startDate = calendaItem.dateInterval;
+        _startModel = calendaItem;
         [self showPopViewWithIndexPath:indexPath];
     }
     // 当开始日期和结束日期同时存在时(点击为重新选时间段)
     else if(_startDate > 0 && _endDate > 0)
     {
         _startDate = calendaItem.dateInterval;
+        _startModel = calendaItem;
         _endDate = 0;
+        _endModel = nil;
         [self showPopViewWithIndexPath:indexPath];
     }
     else
@@ -302,8 +287,10 @@
         {
             needReload = NO;
             _endDate = calendaItem.dateInterval;
+            _endModel = calendaItem;
             [_datesDescription removeAllObjects];
             [_dates removeAllObjects];
+            [self modelToDict:_startModel endModel:_endModel];
             [_collectionView reloadData];
             [_collectionView layoutIfNeeded];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -316,6 +303,7 @@
         else
         {
             _startDate = calendaItem.dateInterval;
+            _startModel = calendaItem;
             [self showPopViewWithIndexPath:indexPath];
         }
     }
@@ -361,6 +349,42 @@
         _popView.bottomLabelText = startDateString;
         [_popView showWithAnimation];
     }
+}
+
+- (void)modelToDict:(MSSCalendarModel *)startModel endModel:(MSSCalendarModel *)endModel {
+    NSInteger week = startModel.week;
+    for (NSInteger year = startModel.year; year <= endModel.year; year++) {
+        NSInteger startMonth = year == startModel.year ? startModel.month : 1;
+        NSInteger lastMonth = year == endModel.year ? endModel.month : 12;
+        for (NSInteger month = startMonth; month <= lastMonth; month++) {
+            NSInteger allDays;
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                allDays = 31;
+            } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                allDays = 30;
+            } else if ([self isRunnian:year]){
+                allDays = 29;
+            } else {
+                allDays = 28;
+            }
+            NSInteger startDay = (year == startModel.year && month == startModel.month) ? startModel.day : 1;
+            NSInteger lastDay = (year == endModel.year && month == endModel.month) ? endModel.day : allDays;
+            for (NSInteger day = startDay; day <= lastDay; day++) {
+                NSMutableDictionary<NSString *, NSString *> *infoItem = [[NSMutableDictionary alloc] init];
+                infoItem[@"year"] = [NSString stringWithFormat:@"%ld", year];
+                infoItem[@"month"] = [NSString stringWithFormat:@"%ld", month];
+                infoItem[@"day"] = [NSString stringWithFormat:@"%ld", day];
+                infoItem[@"week"] = [NSString stringWithFormat:@"%ld", week];
+                week++;
+                week = week % 7;
+                [_dates addObject:infoItem];
+            }
+        }
+    }
+}
+
+- (BOOL)isRunnian:(NSInteger)year {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
 @end

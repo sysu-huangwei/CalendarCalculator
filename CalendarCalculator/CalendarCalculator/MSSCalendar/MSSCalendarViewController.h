@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MSSCalendarHeaderModel.h"
 
 @protocol MSSCalendarViewControllerDelegate <NSObject>
 - (void)calendarViewConfirmClickWithStartDate:(NSInteger)startDate endDate:(NSInteger)endDate dates:(NSMutableArray<NSMutableDictionary<NSString *, NSString *> *> *)dates;
@@ -21,6 +22,8 @@ typedef NS_ENUM(NSInteger, MSSCalendarViewControllerType)
 
 @interface MSSCalendarViewController : UIViewController<UICollectionViewDelegate,UICollectionViewDataSource>
 @property (nonatomic,weak)id<MSSCalendarViewControllerDelegate> delegate;
+@property (nonatomic,strong)MSSCalendarModel *startModel;
+@property (nonatomic,strong)MSSCalendarModel *endModel;
 @property (nonatomic,assign)NSInteger startDate;// 选中开始时间
 @property (nonatomic,assign)NSInteger endDate;// 选中结束时间
 
