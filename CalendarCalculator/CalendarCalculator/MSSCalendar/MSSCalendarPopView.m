@@ -62,7 +62,7 @@ static const CGFloat CalendarPopViewAlpha = 0.5f;
 {
     if(!self.superview)
     {
-        [[UIApplication sharedApplication].keyWindow addSubview:self];
+        [[UIApplication sharedApplication].windows.firstObject addSubview:self];
     }
     self.transform = CGAffineTransformMakeScale(0.1, 0.1);
     [UIView animateWithDuration:0.2 animations:^{
@@ -73,7 +73,7 @@ static const CGFloat CalendarPopViewAlpha = 0.5f;
 // 获取指定视图在window中的位置
 - (CGRect)getFrameInWindow:(UIView *)view
 {
-    return [view.superview convertRect:view.frame toView:[UIApplication sharedApplication].keyWindow];
+    return [view.superview convertRect:view.frame toView:[UIApplication sharedApplication].windows.firstObject];
 }
 
 - (void)drawRect:(CGRect)rect

@@ -63,10 +63,10 @@
 - (void)initDataSource
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        MSSCalendarManager *manager = [[MSSCalendarManager alloc]initWithShowChineseHoliday:_showChineseHoliday showChineseCalendar:_showChineseCalendar startDate:_startDate];
-        NSArray *tempDataArray = [manager getCalendarDataSoruceWithLimitMonth:_limitMonth type:_type];
+        MSSCalendarManager *manager = [[MSSCalendarManager alloc]initWithShowChineseHoliday:self->_showChineseHoliday showChineseCalendar:self->_showChineseCalendar startDate:self->_startDate];
+        NSArray *tempDataArray = [manager getCalendarDataSoruceWithLimitMonth:self->_limitMonth type:self->_type];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_dataArray addObjectsFromArray:tempDataArray];
+            [self->_dataArray addObjectsFromArray:tempDataArray];
             [self showCollectionViewWithStartIndexPath:manager.startIndexPath];
         });
     });
@@ -294,8 +294,8 @@
             [_collectionView reloadData];
             [_collectionView layoutIfNeeded];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if([_delegate respondsToSelector:@selector(calendarViewConfirmClickWithStartDate:endDate:dates:)]) {
-                    [_delegate calendarViewConfirmClickWithStartDate:_startDate endDate:_endDate dates:_dates];
+                if([self->_delegate respondsToSelector:@selector(calendarViewConfirmClickWithStartDate:endDate:dates:)]) {
+                    [self->_delegate calendarViewConfirmClickWithStartDate:self->_startDate endDate:self->_endDate dates:self->_dates];
                 }
             });
             [self dismissViewControllerAnimated:YES completion:nil];

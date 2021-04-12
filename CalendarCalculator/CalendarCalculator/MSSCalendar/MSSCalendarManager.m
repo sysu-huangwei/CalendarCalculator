@@ -28,7 +28,7 @@
 {
     self = [super init];
     {
-        _greCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
+        _greCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         _todayDate = [NSDate date];
         _todayCompontents = [self dateToComponents:_todayDate];
         _dateFormatter = [[NSDateFormatter alloc]init];
@@ -143,17 +143,17 @@
 // 一个月有多少天
 - (NSUInteger)numberOfDaysInCurrentMonth:(NSDate *)date
 {
-    return [_greCalendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:date].length;
+    return [_greCalendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date].length;
 }
 
 // 确定这个月的第一天是星期几
 - (NSUInteger)startDayOfWeek:(NSDate *)date
 {
     NSDate *startDate = nil;
-    BOOL result = [_greCalendar rangeOfUnit:NSMonthCalendarUnit startDate:&startDate interval:NULL forDate:date];
+    BOOL result = [_greCalendar rangeOfUnit:NSCalendarUnitMonth startDate:&startDate interval:NULL forDate:date];
     if(result)
     {
-        return [_greCalendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSWeekCalendarUnit forDate:startDate];
+        return [_greCalendar ordinalityOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitWeekOfMonth forDate:startDate];
     }
     return 0;
 }
@@ -261,7 +261,7 @@
 #pragma mark NSDate和NSCompontents转换
 - (NSDateComponents *)dateToComponents:(NSDate *)date
 {
-    NSDateComponents *components = [_greCalendar components:(NSEraCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit) fromDate:date];
+    NSDateComponents *components = [_greCalendar components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:date];
     return components;
 }
 

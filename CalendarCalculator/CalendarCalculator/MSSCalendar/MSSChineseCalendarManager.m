@@ -22,7 +22,7 @@
     self = [super init];
     if(self)
     {
-        _chineseCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSChineseCalendar];
+        _chineseCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierChinese];
 //        _chineseYearArray = [NSArray arrayWithObjects:
 //                                 @"甲子", @"乙丑", @"丙寅", @"丁卯",  @"戊辰",  @"己巳",  @"庚午",  @"辛未",  @"壬申",  @"癸酉",
 //                                 @"甲戌",   @"乙亥",  @"丙子",  @"丁丑", @"戊寅",   @"己卯",  @"庚辰",  @"辛己",  @"壬午",  @"癸未",
@@ -43,7 +43,7 @@
 
 - (void)getChineseCalendarWithDate:(NSDate *)date calendarItem:(MSSCalendarModel *)calendarItem
 {
-    unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
+    unsigned unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitDay;
     
     NSDateComponents *localeComp = [_chineseCalendar components:unitFlags fromDate:date];
 //    NSString *chineseYear = [_chineseYearArray objectAtIndex:localeComp.year - 1];
